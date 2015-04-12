@@ -1,7 +1,11 @@
 <?php
 if(!defined("SPECIALCONSTANT")) die ("Acesso negado!");
 
-/* Metodo GET */
+/*
+     Metodo GET
+     Possibilita api oferecer pela url https://api.ongbook.org/v1/entidades
+     a listagem de todas entidades cadastradas.
+*/
 
 $app->get("/entidades", function() use($app)
 {
@@ -22,7 +26,13 @@ $app->get("/entidades", function() use($app)
      }
 });
 
-/* Metodo GET */
+
+
+/*
+     Metodo GET - passando parâmetro.
+     Possibilita a api oferecer as informações detalhada (perfil) de uma Entidade Social.
+     A url deve ser consumida passando um parâmetro para seleção. No caso, @CNPJ.
+*/
 
 $app->get("/entidades/:cnpj", function($cnpj) use($app)
 {
@@ -44,7 +54,12 @@ $app->get("/entidades/:cnpj", function($cnpj) use($app)
      }
 });
 
-/* Metodo POST */
+
+
+/*
+     Metodo POST
+     Possibilita a api oferecer o cadastro de Entidade Social pela url https://api.ongbook.org/v1/entidades.
+*/
 
 $app->post("/entidades/", function() use($app)
 {
@@ -82,12 +97,12 @@ $app->post("/entidades/", function() use($app)
           $dbh->bindParam(14, $cel);
 
           $dbh->execute();
-          $bookId = $connection->lastInsertId();
+          $ultimaEntidadeCadastrada = $connection->lastInsertId();
           $connection = null;
 
           $app->response->headers->set("Content-type", "application/json;charset=utf-8");
           $app->response->status(200);
-          $app->response->body(json_encode($bookId));
+          $app->response->body(json_encode($ultimaEntidadeCadastrada));
      }
      catch(PDOException $e)
      {
@@ -95,22 +110,49 @@ $app->post("/entidades/", function() use($app)
      }
 });
 
-/* Metodo PUT
+/*
+     Metodo PUT
+     Possibilita a api oferecer a 'edição do perfil de uma Entidade Social'.
+*/
 
-$app->put("/books/", function() use($app)
+/*
+
+$app->put("/entidades/", function() use($app)
 {
-     $title = $app->request->put("title");
-     $isbn = $app->request->put("isbn");
-     $author = $app->request->put("author");
-     $id = $app->request->put("id");
+     $cnpj = $app->request->post("cnpj");
+     $razaoSocial = $app->request->post("razaoSocial");
+     $nomeFantasia = $app->request->post("nomeFantasia");
+     $endereco = $app->request->post("endereco");
+     $numero = $app->request->post("numero");
+     $bairro = $app->request->post("bairro");
+     $cidade = $app->request->post("cidade");
+     $uf = $app->request->post("uf");
+     $publicoAlvo = $app->request->post("publicoAlvo");
+     $site = $app->request->post("site");
+     $email = $app->request->post("email");
+     $tel = $app->request->post("tel");
+     $nomeResponsavel = $app->request->post("nomeResponsavel");
+     $cel = $app->request->post("cel");
 
      try{
           $connection = getConnection();
-          $dbh = $connection->prepare("UPDATE books SET title = ?, isbn = ?, author = ?, created_at = NOW() WHERE id = ?");
-          $dbh->bindParam(1, $title);
-          $dbh->bindParam(2, $isbn);
-          $dbh->bindParam(3, $author);
-          $dbh->bindParam(4, $id);
+          $dbh = $connection->prepare("UPDATE entidades SET (cnpj = ?, razaoSocial = ?, nomeFantasia = ?, endereco = ?,
+                    numero = ?, bairro = ?, cidade = ?, uf = ?, publicoAlvo = ?, site = ?, email = ?, tel = ?, nomeResponsavel ?, cel = ?) WHERE id = ?");
+
+          $dbh->bindParam(2, $razaoSocial);
+          $dbh->bindParam(3, $nomeFantasia);
+          $dbh->bindParam(4, $endereco);
+          $dbh->bindParam(5, $numero);
+          $dbh->bindParam(6, $bairro);
+          $dbh->bindParam(7, $cidade);
+          $dbh->bindParam(8, $uf);
+          $dbh->bindParam(9, $publicoAlvo);
+          $dbh->bindParam(10, $site);
+          $dbh->bindParam(11, $email);
+          $dbh->bindParam(12, $tel);
+          $dbh->bindParam(13, $nomeResponsavel);
+          $dbh->bindParam(14, $cel);
+
           $dbh->execute();
           $connection = null;
 
@@ -124,14 +166,22 @@ $app->put("/books/", function() use($app)
      }
 });
 
-/* Metodo DELETE
 
-$app->delete("/books/:id", function($id) use($app)
+
+/*
+     Metodo DELETE (na verdade não haverá a possibilidade de deletar uma Entidade Social, somente desabilitar)
+     O método descrito abaixo fica sendo só para motivo de aprendizado.
+     Devemos implementar um metodo que possibilite a api oferecer à Entidade Social desabilitar seu cadastro.
+     Com um atributo booleano.
+*/
+
+/*
+$app->delete("/entidades/:cnpj", function($cnpj) use($app)
 {
      try{
           $connection = getConnection();
-          $dbh = $connection->prepare("DELETE FROM books (WHERE id = ?");
-          $dbh->bindParam(1, $id);
+          $dbh = $connection->prepare("DELETE FROM entidades (WHERE cnpj = ?");
+          $dbh->bindParam(1, $cnpj);
           $dbh->execute();
           $connection = null;
 
