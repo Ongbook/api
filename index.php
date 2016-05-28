@@ -6,7 +6,12 @@ require_once 'vendor/autoload.php';
 $app = new \Slim\Slim();
 
 define("SPECIALCONSTANT", true);
+
+// Configuracao PDO - acesso ao db
 require 'app/libs/connect.php';
-require 'app/routes/api.php';
+
+// Rotas
+require 'app/routes/entidades.php';
+require 'app/routes/enderecos.php';
 
 $app->run();

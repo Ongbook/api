@@ -4,7 +4,7 @@ if(!defined("SPECIALCONSTANT")) die ("Acesso negado!");
 /*
      Metodo GET
      Possibilita api oferecer pela url https://api.ongbook.org/v1/entidades
-     a listagem de todas entidades cadastradas.
+     a listagem de todas Entidades cadastradas.
 */
 
 $app->get("/entidades", function() use($app)
