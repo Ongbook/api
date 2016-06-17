@@ -1,5 +1,5 @@
 <?php
- header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: *');
 require_once 'vendor/autoload.php';
 
 \Slim\Slim::registerAutoloader();
